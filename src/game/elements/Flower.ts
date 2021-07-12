@@ -1,7 +1,5 @@
 import { Scene } from "babylonjs/scene";
 import { Coordinates, RGBA } from ".";
-import { randomElement } from "../utils/randomElement";
-import { randomInt } from "../utils/randomInt";
 import { Box } from "./Box";
 import { MapElement } from "./MapElement";
 
@@ -40,20 +38,29 @@ const cicrleColor: RGBA = {
   a: 1,
 };
 
+const multiplySeedHeightConstant = 26;
+
 export class Flower extends MapElement {
   scapeHeight!: number;
   leafColor!: RGBA;
 
-  constructor(coordinates: Coordinates, scene: Scene) {
-    super(coordinates, scene);
+  constructor(coordinates: Coordinates, seed: number) {
+    super(coordinates, seed);
 
-    this.scapeHeight = randomInt(2, 8);
-    this.leafColor = randomElement(leafColors);
+    let height = multiplySeedHeightConstant * this._seed;
+    height = Number(String(height < 10 ? height * 10 : height).charAt(0));
+
+    this.scapeHeight = height;
+    this.leafColor = leafColors[this._seed % 2 === 0 ? 0 : 1];
+  }
+
+  draw = (scene: Scene): void => {
+    this._scene = scene;
 
     this._scape();
     this._circle();
     this._leaf();
-  }
+  };
 
   private _scape = () => {
     for (let i = 0; i < this.scapeHeight; i++) {

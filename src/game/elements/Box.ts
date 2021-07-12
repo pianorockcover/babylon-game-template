@@ -10,8 +10,6 @@ const boxSizes = {
   eighth: 8,
 };
 
-const boxStep = boxScale / boxSizes.eighth;
-
 interface BoxParams {
   scene: Scene;
   size: BoxSize;
@@ -43,6 +41,10 @@ export class Box {
       },
       this.scene
     );
+
+    const boxStep =
+      boxScale /
+      (coordinates.stepSize ? boxSizes[coordinates.stepSize] : boxSizes.eighth);
 
     this._box.position.x = coordinates.x * boxStep;
     this._box.position.y = coordinates.y * boxStep;
