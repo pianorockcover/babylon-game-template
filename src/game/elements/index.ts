@@ -19,6 +19,6 @@ export interface RGBA {
 /**
  * Размер базового блока - full
  */
-export const boxScale = 1;
+export const boxScale = 0.125;
 
 export const mapElements = [Grass, Flower];

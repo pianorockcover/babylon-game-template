@@ -1,20 +1,28 @@
-import { Color3, Mesh, MeshBuilder, Scene, StandardMaterial } from "babylonjs";
+import {
+  Color3,
+  Color4,
+  Mesh,
+  MeshBuilder,
+  Scene,
+  StandardMaterial,
+} from "babylonjs";
+import Color from "color";
 import { boxScale, Coordinates, RGBA } from ".";
 
-export type BoxSize = "full" | "half" | "quarter" | "eighth";
+export type BoxSize = "full" | "half" | "quarter";
 
 const boxSizes = {
   full: 1,
   half: 2,
   quarter: 4,
-  eighth: 8,
 };
 
 interface BoxParams {
   scene: Scene;
-  size: BoxSize;
+  size?: BoxSize;
   coordinates: Coordinates;
   color: RGBA;
+  noEdges?: boolean;
 }
 
 export class Box {
@@ -28,7 +36,9 @@ export class Box {
   coordinates!: Coordinates;
   color!: RGBA;
 
-  constructor({ scene, size, coordinates, color }: BoxParams) {
+  constructor({ scene, size, coordinates, color, noEdges }: BoxParams) {
+    size = size || "full";
+
     this.scene = scene;
     this._name = `box-${+new Date()}`;
 
@@ -44,7 +54,7 @@ export class Box {
 
     const boxStep =
       boxScale /
-      (coordinates.stepSize ? boxSizes[coordinates.stepSize] : boxSizes.eighth);
+      (coordinates.stepSize ? boxSizes[coordinates.stepSize] : boxSizes.full);
 
     this._box.position.x = coordinates.x * boxStep;
     this._box.position.y = coordinates.y * boxStep;
@@ -61,5 +71,27 @@ export class Box {
     );
 
     this._box.material = this._material;
+
+    if (!noEdges) {
+      this._box.enableEdgesRendering();
+      this._box.edgesWidth = 0.5;
+
+      const edgesColor = Color(
+        `rgb(${color.r},${color.g},${color.b})`,
+        "rgb"
+      ).darken(0.7);
+
+      const edgesColorRgb: RGBA = (edgesColor
+        .rgb()
+        .round()
+        .object() as unknown) as RGBA;
+
+      this._box.edgesColor = new Color4(
+        edgesColorRgb.r / 100,
+        edgesColorRgb.g / 100,
+        edgesColorRgb.b / 100,
+        1
+      );
+    }
   }
 }

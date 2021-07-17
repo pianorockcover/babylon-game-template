@@ -66,7 +66,6 @@ export class Flower extends MapElement {
     for (let i = 0; i < this.scapeHeight; i++) {
       new Box({
         scene: this._scene,
-        size: "eighth",
         coordinates: {
           x: this._coordinates.x,
           y: this._coordinates.y + i,
@@ -81,7 +80,6 @@ export class Flower extends MapElement {
     for (let i = -1; i < 2; i++) {
       new Box({
         scene: this._scene,
-        size: "eighth",
         coordinates: {
           x: this._coordinates.x + i,
           y: this._coordinates.y + this.scapeHeight,
@@ -98,7 +96,6 @@ export class Flower extends MapElement {
 
       new Box({
         scene: this._scene,
-        size: "eighth",
         coordinates: {
           x: this._coordinates.x + i,
           y: this._coordinates.y + this.scapeHeight + 1,
@@ -111,7 +108,6 @@ export class Flower extends MapElement {
     for (let i = -1; i < 2; i++) {
       new Box({
         scene: this._scene,
-        size: "eighth",
         coordinates: {
           x: this._coordinates.x + i,
           y: this._coordinates.y + this.scapeHeight + 2,
@@ -125,7 +121,6 @@ export class Flower extends MapElement {
   private _leaf = () => {
     new Box({
       scene: this._scene,
-      size: "eighth",
       coordinates: {
         x: this._coordinates.x,
         y: this._coordinates.y + this.scapeHeight + 1,

@@ -1,8 +1,6 @@
 import { Scene } from "babylonjs/scene";
 import { RGBA } from ".";
-import { randomElement } from "../utils/randomElement";
-import { randomInt } from "../utils/randomInt";
-import { Box, BoxSize } from "./Box";
+import { Box } from "./Box";
 import { MapElement } from "./MapElement";
 
 const groundColors: RGBA[] = [
@@ -26,7 +24,7 @@ export class Ground extends MapElement {
 
     // TMP
     const groundSize = 15;
-    const fromY = this._coordinates.y;
+    const fromY = this._coordinates.y + 1;
     const fromX = this._coordinates.x - groundSize;
     const toX = this._coordinates.x + groundSize;
 
@@ -37,29 +35,13 @@ export class Ground extends MapElement {
       for (let j = fromZ; j < toZ; j++) {
         new Box({
           scene: this._scene,
-          size: "eighth",
-          color: randomElement(groundColors),
+          color: groundColors[0],
           coordinates: {
             x: i,
             y: fromY,
             z: j,
           },
         });
-
-        if (randomInt(10, 100) % 3 !== 0) {
-          const size: BoxSize = randomElement(["eighth", "quarter"]);
-          new Box({
-            scene: this._scene,
-            size: size,
-            color: randomElement(groundColors),
-            coordinates: {
-              x: i,
-              y: fromY + 1,
-              z: j,
-              stepSize: size,
-            },
-          });
-        }
       }
     }
   };

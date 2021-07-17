@@ -14,7 +14,6 @@ export class Grass extends MapElement {
     for (let i = 0; i < height; i++) {
       new Box({
         scene: this._scene,
-        size: "eighth",
         color: {
           r: 72,
           g: 168,
