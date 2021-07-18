@@ -27,7 +27,7 @@ export class Tree extends MapElement {
     super(coordinates, seed);
 
     this.trunkHeight = 4 + modSeed(seed);
-    this.leathsRadius = this.trunkHeight / 2;
+    this.leathsRadius = Math.trunc(this.trunkHeight / 0.5) * 10;
     this.leathsRadius =
       this.leathsRadius < 8
         ? 8
@@ -41,7 +41,7 @@ export class Tree extends MapElement {
   drawTrunk = (): PureBoxParams[] => {
     const { x, y, z } = this.coordinates;
 
-    const drawGrid = getColoredGrid(this.trunkColor, "/img/tree1.jpg");
+    const drawGrid = getColoredGrid(this.trunkColor);
 
     const result: PureBoxParams[] = [];
 
@@ -205,7 +205,7 @@ export class Tree extends MapElement {
 
     const boxesMap: { [key: string]: boolean } = {};
 
-    for (let y = 0; y < size; y++) {
+    for (let y = size - 1; y >= 0; y--) {
       for (let x = 0; x < size; x++) {
         const yMidlelevel = Math.abs(yCenter - y);
         let yMidlelevelNulls = yMidlelevel * 5;
@@ -221,12 +221,12 @@ export class Tree extends MapElement {
               randomInt(300, 900) % 2 === 0 &&
               y !== 0 &&
               y !== size - 1 &&
-              boxesMap[`${y - 1},${x},${z}`]
+              boxesMap[`${y + 1},${x},${z}`]
             ) {
               result.push({
                 color: this.appleColor,
                 coordinates: {
-                  y: center.y + y - 0.4,
+                  y: center.y + y + 0.4,
                   z: center.z - z + zBias,
                   x: center.x + x - xBias,
                 },
@@ -237,8 +237,22 @@ export class Tree extends MapElement {
           }
 
           if (
-            yMidlelevel > size / 2 - 2 &&
+            yMidlelevel > size / 2 - 4 &&
             (z === 0 || x === 0 || z === size - 1 || x === size - 1)
+          ) {
+            continue;
+          }
+
+          if (
+            yMidlelevel > size / 2 - 3 &&
+            (z === 1 || x === 1 || z === size - 2 || x === size - 2)
+          ) {
+            continue;
+          }
+
+          if (
+            yMidlelevel > size / 2 - 2 &&
+            (z === 2 || x === 2 || z === size - 3 || x === size - 3)
           ) {
             continue;
           }
@@ -250,7 +264,7 @@ export class Tree extends MapElement {
               z: center.z - z + zBias,
               x: center.x + x - xBias,
             },
-            texture: "img/tree2.jpg",
+            // texture: "img/tree2.jpg",
           });
 
           boxesMap[`${y},${x},${z}`] = true;

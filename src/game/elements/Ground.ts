@@ -44,7 +44,7 @@ export class Ground extends MapElement {
             y: fromY,
             z: j,
           },
-          texture: "/img/grass.jpg",
+          // texture: "/img/grass.jpg",
         });
       }
     }

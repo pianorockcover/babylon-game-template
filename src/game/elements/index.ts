@@ -24,6 +24,6 @@ export interface RGBA {
 /**
  * Размер базового блока - full
  */
-export const boxScale = 0.105;
+export const boxScale = 0.04;
 
 export const mapElements = [Tree];
