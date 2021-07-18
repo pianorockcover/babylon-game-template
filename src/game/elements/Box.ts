@@ -5,25 +5,31 @@ import {
   MeshBuilder,
   Scene,
   StandardMaterial,
+  Texture,
 } from "babylonjs";
 import Color from "color";
-import { boxScale, Coordinates, RGBA } from ".";
+import { boxScale, Coordinates, RGBA, Rotation } from ".";
 
-export type BoxSize = "full" | "half" | "quarter";
+export type BoxSize = "full" | "half" | "quarter" | "eight";
 
 const boxSizes = {
   full: 1,
   half: 2,
   quarter: 4,
+  eight: 8,
 };
 
-interface BoxParams {
+export interface BoxParams {
   scene: Scene;
   size?: BoxSize;
   coordinates: Coordinates;
+  rotation?: Rotation;
   color: RGBA;
   noEdges?: boolean;
+  texture?: string;
 }
+
+export type PureBoxParams = Omit<BoxParams, "scene">;
 
 export class Box {
   private _name!: string;
@@ -36,7 +42,15 @@ export class Box {
   coordinates!: Coordinates;
   color!: RGBA;
 
-  constructor({ scene, size, coordinates, color, noEdges }: BoxParams) {
+  constructor({
+    scene,
+    size,
+    coordinates,
+    color,
+    rotation,
+    noEdges,
+    texture,
+  }: BoxParams) {
     size = size || "full";
 
     this.scene = scene;
@@ -60,15 +74,26 @@ export class Box {
     this._box.position.y = coordinates.y * boxStep;
     this._box.position.z = coordinates.z * boxStep;
 
+    if (rotation) {
+      this._box.rotation.x = rotation.x * boxStep;
+      this._box.rotation.y = rotation.y * boxStep;
+      this._box.rotation.z = rotation.z * boxStep;
+    }
+
     this._materialName = `material-${+new Date()}`;
 
     this._material = new StandardMaterial(this._materialName, this.scene);
-    this._material.alpha = color.a;
-    this._material.diffuseColor = new Color3(
-      color.r / 100,
-      color.g / 100,
-      color.b / 100
-    );
+
+    if (texture) {
+      this._material.diffuseTexture = new Texture(texture, this.scene);
+    } else {
+      this._material.alpha = color.a;
+      this._material.diffuseColor = new Color3(
+        color.r / 100,
+        color.g / 100,
+        color.b / 100
+      );
+    }
 
     this._box.material = this._material;
 

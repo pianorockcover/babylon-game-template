@@ -1,6 +1,5 @@
-import { Scene } from "babylonjs/scene";
-import { RGBA } from ".";
-import { Box } from "./Box";
+import { RGBA, Coordinates } from ".";
+import { PureBoxParams } from "./Box";
 import { MapElement } from "./MapElement";
 
 const groundColors: RGBA[] = [
@@ -19,30 +18,37 @@ const groundColors: RGBA[] = [
 ];
 
 export class Ground extends MapElement {
-  draw = (scene: Scene): void => {
-    this._scene = scene;
+  constructor(coordinates: Coordinates, seed: number) {
+    super(coordinates, seed);
 
+    this.draft = [...this.drawGround()];
+  }
+
+  drawGround = (): PureBoxParams[] => {
+    const result: PureBoxParams[] = [];
     // TMP
-    const groundSize = 15;
-    const fromY = this._coordinates.y + 1;
-    const fromX = this._coordinates.x - groundSize;
-    const toX = this._coordinates.x + groundSize;
+    const groundSize = 25;
+    const fromY = this.coordinates.y + 1;
+    const fromX = this.coordinates.x - groundSize;
+    const toX = this.coordinates.x + groundSize;
 
-    const fromZ = this._coordinates.z - groundSize;
-    const toZ = this._coordinates.z + groundSize;
+    const fromZ = this.coordinates.z - groundSize;
+    const toZ = this.coordinates.z + groundSize;
 
     for (let i = fromX; i < toX; i++) {
       for (let j = fromZ; j < toZ; j++) {
-        new Box({
-          scene: this._scene,
+        result.push({
           color: groundColors[0],
           coordinates: {
             x: i,
             y: fromY,
             z: j,
           },
+          texture: "/img/grass.jpg",
         });
       }
     }
+
+    return result;
   };
 }

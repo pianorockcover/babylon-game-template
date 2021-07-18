@@ -1,12 +1,17 @@
 import { BoxSize } from "./Box";
-import { Flower } from "./Flower";
-import { Grass } from "./Grass";
+import { Tree } from "./Tree";
 
 export interface Coordinates {
   x: number;
   y: number;
   z: number;
   stepSize?: BoxSize;
+}
+
+export interface Rotation {
+  x: number;
+  y: number;
+  z: number;
 }
 
 export interface RGBA {
@@ -19,6 +24,6 @@ export interface RGBA {
 /**
  * Размер базового блока - full
  */
-export const boxScale = 0.125;
+export const boxScale = 0.105;
 
-export const mapElements = [Grass, Flower];
+export const mapElements = [Tree];

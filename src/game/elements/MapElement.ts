@@ -1,18 +1,24 @@
 import { Scene } from "babylonjs";
 import { Coordinates } from ".";
+import { Box, PureBoxParams } from "./Box";
 
 export abstract class MapElement {
-  protected _coordinates!: Coordinates;
-  protected _scene!: Scene;
-  protected _seed!: number;
+  protected coordinates!: Coordinates;
+  protected scene!: Scene;
+  protected seed!: number;
+
+  protected draft: PureBoxParams[] = [];
+  protected boxes: Box[] = [];
 
   constructor(coordinates: Coordinates, seed: number) {
-    this._coordinates = coordinates;
-    this._seed = seed;
+    this.coordinates = coordinates;
+    this.seed = seed;
   }
 
   draw = (scene: Scene): void => {
-    this._scene = scene;
-    console.log("Draw map element");
+    this.scene = scene;
+    this.boxes = this.draft.map(
+      (boxParams) => new Box({ scene, ...boxParams, noEdges: true })
+    );
   };
 }

@@ -1,7 +1,6 @@
 import { Scene } from "babylonjs";
-import { Ground } from "./elements/Ground";
 import { Tree } from "./elements/Tree";
-import { randomInt } from "./utils/randomInt";
+import { Ground } from "./elements/Ground";
 
 export const generateWorld = (scene: Scene): void => {
   const groud = new Ground(
@@ -15,13 +14,13 @@ export const generateWorld = (scene: Scene): void => {
 
   groud.draw(scene);
 
-  const tree = new Tree({ x: -5, y: -4, z: -4 }, randomInt(1000, 9999));
+  const tree = new Tree({ x: -10, y: -4, z: -4 }, 2341);
   tree.draw(scene);
 
-  const tree2 = new Tree({ x: 2, y: -4, z: -8 }, randomInt(1000, 9999));
+  const tree2 = new Tree({ x: 5, y: -4, z: 0 }, 8748);
   tree2.draw(scene);
 
-  const tree3 = new Tree({ x: 7, y: -4, z: 2 }, randomInt(1000, 9999));
+  const tree3 = new Tree({ x: -9, y: -4, z: 10 }, 9246);
   tree3.draw(scene);
 
   // const worldData =
