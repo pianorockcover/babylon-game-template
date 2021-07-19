@@ -25,7 +25,8 @@ export const createScene = (canvasElement: HTMLCanvasElement): void => {
 
   camera.attachControl(canvasElement, true);
 
-  new HemisphericLight("light", new Vector3(0.5, -0.3, 0), scene);
+  const light = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
+  light.intensity = 0.4;
 
   engine3D.runRenderLoop(() => scene.render());
 

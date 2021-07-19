@@ -37,6 +37,8 @@ export class Box {
   private _material!: StandardMaterial;
   private _materialName!: string;
 
+  static initialBox: Mesh | undefined;
+
   scene!: Scene;
   size!: BoxSize;
   coordinates!: Coordinates;
@@ -56,15 +58,24 @@ export class Box {
     this.scene = scene;
     this._name = `box-${+new Date()}`;
 
-    this._box = MeshBuilder.CreateBox(
-      this._name,
-      {
-        width: boxScale / boxSizes[size],
-        height: boxScale / boxSizes[size],
-        size: boxScale / boxSizes[size],
-      },
-      this.scene
-    );
+    if (!Box.initialBox) {
+      Box.initialBox = MeshBuilder.CreateBox(
+        "initial-box",
+        {
+          width: boxScale,
+          height: boxScale,
+          size: boxScale,
+          updatable: false,
+        },
+        this.scene
+      );
+      console.log("intiial-box");
+    }
+
+    this._box = Box.initialBox.clone(this._name);
+    this._box.scaling.x = 1 / boxSizes[size];
+    this._box.scaling.y = 1 / boxSizes[size];
+    this._box.scaling.z = 1 / boxSizes[size];
 
     const boxStep =
       boxScale /

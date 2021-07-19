@@ -1,5 +1,4 @@
 import { BoxSize } from "./Box";
-import { Tree } from "./Tree";
 
 export interface Coordinates {
   x: number;
@@ -24,6 +23,4 @@ export interface RGBA {
 /**
  * Размер базового блока - full
  */
-export const boxScale = 0.04;
-
-export const mapElements = [Tree];
+export const boxScale = 0.05;

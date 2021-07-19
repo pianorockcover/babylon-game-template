@@ -1,8 +1,10 @@
 import { Scene } from "babylonjs";
-import { Tree } from "./elements/Tree";
 import { Ground } from "./elements/Ground";
 import { MapElement } from "./elements/MapElement";
+import { Tree } from "./elements/Tree";
 import { randomInt } from "./utils/randomInt";
+
+export const mapElements = [Tree];
 
 export const generateWorld = (scene: Scene): void => {
   const groud = new Ground(
@@ -17,8 +19,13 @@ export const generateWorld = (scene: Scene): void => {
   groud.draw(scene);
 
   const trees: MapElement[] = [];
-  for (let i = 0; i < 1; i++) {
-    trees.push(new Tree({ x: 0, y: -4, z: 0 }, randomInt(1000, 9999)));
+  for (let i = 0; i < 5; i++) {
+    trees.push(
+      new Tree(
+        { x: randomInt(-20, 20), y: -4, z: randomInt(-20, 20) },
+        randomInt(1000, 9999)
+      )
+    );
   }
 
   trees.forEach((tree) => tree.draw(scene));

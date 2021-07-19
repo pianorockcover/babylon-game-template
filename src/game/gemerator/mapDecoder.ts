@@ -1,5 +1,5 @@
-import { mapElements } from "../elements";
 import { MapElement } from "../elements/MapElement";
+import { mapElements } from "../generateWorld";
 
 export const mapDecoder = (encodedMap: string): MapElement[] => {
   const elements = encodedMap.split(";").map((encodedElement) => {

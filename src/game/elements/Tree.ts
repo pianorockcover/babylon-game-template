@@ -7,21 +7,21 @@ import { randomInt } from "../utils/randomInt";
 import { randomElement } from "../utils/randomElement";
 
 export class Tree extends MapElement {
-  trunkColor: RGBA = { r: 186, g: 133, b: 78, a: 1 };
+  trunkColor: RGBA = { r: 123, g: 100, b: 82, a: 1 };
   trunkStickColor: RGBA = {
-    r: 160,
-    g: 103,
-    b: 41,
+    r: 70,
+    g: 59,
+    b: 54,
     a: 1,
   };
 
   trunkHeight!: number;
   leathsRadius!: number;
 
-  leathsColor: RGBA = { r: 59, g: 131, b: 13, a: 1 };
-  darkLeathsColor: RGBA = { r: 20, g: 57, b: 0, a: 1 };
+  leathsColor: RGBA = { r: 95, g: 210, b: 106, a: 1 };
+  darkLeathsColor: RGBA = { r: 78, g: 153, b: 98, a: 1 };
 
-  appleColor: RGBA = { r: 175, g: 24, b: 16, a: 1 };
+  appleColor: RGBA = { r: 255, g: 87, b: 34, a: 1 };
 
   constructor(coordinates: Coordinates, seed: number) {
     super(coordinates, seed);
@@ -227,6 +227,24 @@ export class Tree extends MapElement {
                 color: this.appleColor,
                 coordinates: {
                   y: center.y + y + 0.4,
+                  z: center.z - z + zBias,
+                  x: center.x + x - xBias,
+                },
+                size: "quarter",
+              });
+              result.push({
+                color: this.appleColor,
+                coordinates: {
+                  y: center.y + y + 0.4,
+                  z: center.z - z + zBias,
+                  x: center.x + x - xBias,
+                },
+                size: "quarter",
+              });
+              result.push({
+                color: this.appleColor,
+                coordinates: {
+                  y: center.y + y + 0.05,
                   z: center.z - z + zBias,
                   x: center.x + x - xBias,
                 },
