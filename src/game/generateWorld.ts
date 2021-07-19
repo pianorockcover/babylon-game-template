@@ -22,7 +22,7 @@ export const generateWorld = (scene: Scene): void => {
   for (let i = 0; i < 5; i++) {
     trees.push(
       new Tree(
-        { x: randomInt(-20, 20), y: -4, z: randomInt(-20, 20) },
+        { x: randomInt(-30, 30), y: -4, z: randomInt(-30, 30) },
         randomInt(1000, 9999)
       )
     );
@@ -33,6 +33,20 @@ export const generateWorld = (scene: Scene): void => {
 
   // const tree2 = new Tree({ x: 5, y: -4, z: 0 }, 8748);
   // tree2.draw(scene);
+
+  // const tree3 = new Tree({ x: 1, y: -4, z: 5 }, 4635);
+  // tree3.draw(scene);
+
+  // const tree4 = new Tree({ x: -8, y: -4, z: -15 }, 6674);
+  // tree4.draw(scene);
+
+  // Optimization
+  scene.freezeActiveMeshes();
+  scene.autoClear = false; // Color buffer
+  scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
+  scene.blockMaterialDirtyMechanism = true;
+  // scene.blockfreeActiveMeshesAndRenderingGroups = true;
+  // scene.blockfreeActiveMeshesAndRenderingGroups = false;
 
   // const tree3 = new Tree({ x: -9, y: -4, z: 10 }, 9246);
   // tree3.draw(scene);

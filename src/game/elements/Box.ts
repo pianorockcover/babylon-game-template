@@ -69,6 +69,11 @@ export class Box {
         },
         this.scene
       );
+      Box.initialBox.position.y = -100;
+
+      Box.initialBox.freezeWorldMatrix();
+      Box.initialBox.doNotSyncBoundingInfo = true;
+      // Box.initialBox.convertToUnIndexedMesh();
       console.log("intiial-box");
     }
 
@@ -91,22 +96,28 @@ export class Box {
       this._box.rotation.z = rotation.z * boxStep;
     }
 
-    this._materialName = `material-${+new Date()}`;
+    // this._materialName = `material-${+new Date()}`;
 
-    this._material = new StandardMaterial(this._materialName, this.scene);
+    // this._material = new StandardMaterial(this._materialName, this.scene);
 
-    if (texture) {
-      this._material.diffuseTexture = new Texture(texture, this.scene);
-    } else {
-      this._material.alpha = color.a;
-      this._material.diffuseColor = new Color3(
-        color.r / 100,
-        color.g / 100,
-        color.b / 100
-      );
-    }
+    // if (texture) {
+    //   this._material.diffuseTexture = new Texture(texture, this.scene);
+    // } else {
+    //   this._material.alpha = color.a;
+    //   this._material.diffuseColor = new Color3(
+    //     color.r / 100,
+    //     color.g / 100,
+    //     color.b / 100
+    //   );
+    // }
 
-    this._box.material = this._material;
+    // this._box.material = this._material;
+
+    // Optimization
+    // this._material.freeze();
+    this._box.freezeWorldMatrix();
+    // this._box.doNotSyncBoundingInfo = true;
+    // this._box.convertToUnIndexedMesh();
 
     if (!noEdges) {
       this._box.enableEdgesRendering();

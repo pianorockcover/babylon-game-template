@@ -40,7 +40,8 @@ export class Ground extends MapElement {
   constructor(coordinates: Coordinates, seed: number) {
     super(coordinates, seed);
 
-    this.draft = [...this.drawGround(), ...this.drawMountain()];
+    this.draft = [...this.drawGround()];
+    // ...this.drawMountain()
   }
 
   drawMountain = (): PureBoxParams[] => {
