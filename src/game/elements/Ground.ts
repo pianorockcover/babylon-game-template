@@ -1,3 +1,4 @@
+import { Color3, MeshBuilder, StandardMaterial } from "babylonjs";
 import { RGBA, Coordinates } from ".";
 import { randomInt } from "../utils/randomInt";
 import { PureBoxParams } from "./Box";
@@ -5,44 +6,43 @@ import { MapElement } from "./MapElement";
 
 export class Ground extends MapElement {
   groundColors: RGBA[] = [
-    {
-      r: 179,
-      g: 218,
-      b: 101,
-      a: 1,
-    },
-    {
-      r: 134,
-      g: 157,
-      b: 67,
-      a: 1,
-    },
-    {
-      r: 91,
-      g: 108,
-      b: 67,
-      a: 1,
-    },
-    {
-      r: 99,
-      g: 100,
-      b: 65,
-      a: 1,
-    },
-    {
-      r: 120,
-      g: 119,
-      b: 73,
-      a: 1,
-    },
+    [179, 218, 101],
+    [134, 157, 67],
+    [91, 108, 67],
+    [99, 100, 65],
+    [120, 119, 73],
   ];
 
   constructor(coordinates: Coordinates, seed: number) {
     super(coordinates, seed);
 
-    this.draft = [...this.drawGround()];
+    // this.draft = [...this.drawGround()];
     // ...this.drawMountain()
   }
+
+  draw = (): void => {
+    const ground = MeshBuilder.CreateGround(
+      "ground",
+      {
+        width: 200,
+        height: 200,
+      },
+      this.scene
+    );
+
+    const newMaterial = new StandardMaterial("ground-material", this.scene);
+
+    newMaterial.diffuseColor = new Color3(
+      (this.groundColors[0][0] !== undefined ? this.groundColors[0][0] : 100) /
+        100,
+      (this.groundColors[0][1] !== undefined ? this.groundColors[0][1] : 100) /
+        100,
+      (this.groundColors[0][2] !== undefined ? this.groundColors[0][2] : 100) /
+        100
+    );
+
+    ground.material = newMaterial;
+  };
 
   drawMountain = (): PureBoxParams[] => {
     const result: PureBoxParams[] = [];
@@ -122,7 +122,6 @@ export class Ground extends MapElement {
             y: fromY,
             z: j,
           },
-          // texture: "/img/grass.jpg",
         });
       }
     }

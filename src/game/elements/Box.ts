@@ -1,13 +1,11 @@
 import {
   Color3,
-  Color4,
   Mesh,
   MeshBuilder,
   Scene,
   StandardMaterial,
   Texture,
 } from "babylonjs";
-import Color from "color";
 import { boxScale, Coordinates, RGBA, Rotation } from ".";
 
 export type BoxSize = "full" | "half" | "quarter" | "eight";
@@ -24,8 +22,7 @@ export interface BoxParams {
   size?: BoxSize;
   coordinates: Coordinates;
   rotation?: Rotation;
-  color: RGBA;
-  noEdges?: boolean;
+  color?: RGBA;
   texture?: string;
 }
 
@@ -34,10 +31,11 @@ export type PureBoxParams = Omit<BoxParams, "scene">;
 export class Box {
   private _name!: string;
   private _box!: Mesh;
-  private _material!: StandardMaterial;
-  private _materialName!: string;
+  private _material?: StandardMaterial;
+  private _materialName?: string;
 
-  static initialBox: Mesh | undefined;
+  private static initialBox: Mesh | undefined;
+  private static materials: { [key: string]: StandardMaterial } = {};
 
   scene!: Scene;
   size!: BoxSize;
@@ -50,7 +48,6 @@ export class Box {
     coordinates,
     color,
     rotation,
-    noEdges,
     texture,
   }: BoxParams) {
     size = size || "full";
@@ -72,9 +69,10 @@ export class Box {
       Box.initialBox.position.y = -100;
 
       Box.initialBox.freezeWorldMatrix();
-      Box.initialBox.doNotSyncBoundingInfo = true;
-      // Box.initialBox.convertToUnIndexedMesh();
-      console.log("intiial-box");
+      // Box.initialBox.doNotSyncBoundingInfo = true;
+      Box.initialBox.convertToUnIndexedMesh();
+
+      console.log("Draw initial-box");
     }
 
     this._box = Box.initialBox.clone(this._name);
@@ -96,49 +94,61 @@ export class Box {
       this._box.rotation.z = rotation.z * boxStep;
     }
 
-    // this._materialName = `material-${+new Date()}`;
-
-    // this._material = new StandardMaterial(this._materialName, this.scene);
-
-    // if (texture) {
-    //   this._material.diffuseTexture = new Texture(texture, this.scene);
-    // } else {
-    //   this._material.alpha = color.a;
-    //   this._material.diffuseColor = new Color3(
-    //     color.r / 100,
-    //     color.g / 100,
-    //     color.b / 100
-    //   );
-    // }
-
-    // this._box.material = this._material;
+    this.setUpMaterial(color, texture);
 
     // Optimization
-    // this._material.freeze();
+    this._box.material?.freeze();
     this._box.freezeWorldMatrix();
-    // this._box.doNotSyncBoundingInfo = true;
+    this._box.doNotSyncBoundingInfo = true;
     // this._box.convertToUnIndexedMesh();
-
-    if (!noEdges) {
-      this._box.enableEdgesRendering();
-      this._box.edgesWidth = 0.5;
-
-      const edgesColor = Color(
-        `rgb(${color.r},${color.g},${color.b})`,
-        "rgb"
-      ).darken(0.7);
-
-      const edgesColorRgb: RGBA = (edgesColor
-        .rgb()
-        .round()
-        .object() as unknown) as RGBA;
-
-      this._box.edgesColor = new Color4(
-        edgesColorRgb.r / 100,
-        edgesColorRgb.g / 100,
-        edgesColorRgb.b / 100,
-        1
-      );
-    }
   }
+
+  setUpMaterial = (color?: RGBA, texture?: string): void => {
+    this._materialName = color ? color.join("") : texture ? texture : undefined;
+
+    if (this._materialName && !Box.materials[this._materialName]) {
+      const newMaterial = new StandardMaterial(this._materialName, this.scene);
+
+      if (texture) {
+        newMaterial.diffuseTexture = new Texture(texture, this.scene);
+      } else if (color) {
+        newMaterial.alpha = color[3] !== undefined ? color[3] : 1;
+        newMaterial.diffuseColor = new Color3(
+          (color[0] !== undefined ? color[0] : 100) / 100,
+          (color[1] !== undefined ? color[1] : 100) / 100,
+          (color[2] !== undefined ? color[2] : 100) / 100
+        );
+      }
+
+      Box.materials[this._materialName] = newMaterial;
+
+      console.log(`Created material ${this._materialName}`);
+    }
+
+    if (this._materialName) {
+      this._material = Box.materials[this._materialName];
+      this._box.material = this._material;
+    }
+  };
+
+  setUpEdges = (): void => {
+    // if (!noEdges) {
+    //   this._box.enableEdgesRendering();
+    //   this._box.edgesWidth = 0.5;
+    //   const edgesColor = Color(
+    //     `rgb(${color.r},${color.g},${color.b})`,
+    //     "rgb"
+    //   ).darken(0.7);
+    //   const edgesColorRgb: RGBA = (edgesColor
+    //     .rgb()
+    //     .round()
+    //     .object() as unknown) as RGBA;
+    //   this._box.edgesColor = new Color4(
+    //     edgesColorRgb.r / 100,
+    //     edgesColorRgb.g / 100,
+    //     edgesColorRgb.b / 100,
+    //     1
+    //   );
+    // }
+  };
 }

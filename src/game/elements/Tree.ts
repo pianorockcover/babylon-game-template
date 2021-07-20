@@ -7,21 +7,17 @@ import { randomInt } from "../utils/randomInt";
 import { randomElement } from "../utils/randomElement";
 
 export class Tree extends MapElement {
-  trunkColor: RGBA = { r: 123, g: 100, b: 82, a: 1 };
-  trunkStickColor: RGBA = {
-    r: 70,
-    g: 59,
-    b: 54,
-    a: 1,
-  };
+  trunkColor: RGBA = [123, 100, 82];
+  trunkStickColor: RGBA = [70, 59, 54];
+  leathsColor: RGBA = [95, 210, 106];
+  darkLeathsColor: RGBA = [78, 153, 98];
+
+  appleColor: RGBA = [255, 87, 34];
+  plumColor: RGBA = [200, 171, 57];
+  immatureFruit: RGBA = [173, 207, 90];
 
   trunkHeight!: number;
   leathsRadius!: number;
-
-  leathsColor: RGBA = { r: 95, g: 210, b: 106, a: 1 };
-  darkLeathsColor: RGBA = { r: 78, g: 153, b: 98, a: 1 };
-
-  appleColor: RGBA = { r: 255, g: 87, b: 34, a: 1 };
 
   constructor(coordinates: Coordinates, seed: number) {
     super(coordinates, seed);
@@ -129,72 +125,6 @@ export class Tree extends MapElement {
     return result;
   };
 
-  drawSphere = (radius: number, center: Coordinates): PureBoxParams[] => {
-    const result: PureBoxParams[] = [];
-
-    const angleStep = 0.3;
-
-    for (let alpha = 0; alpha <= 6.28; alpha += angleStep) {
-      result.push({
-        color: this.leathsColor,
-        coordinates: {
-          x: center.x + Math.cos(alpha) * radius,
-          y: center.y,
-          z: center.z - Math.sin(alpha) * radius,
-        },
-      });
-    }
-
-    for (let direction = 1; direction >= -1; direction -= 2) {
-      for (let beta = angleStep; beta < 1.445; beta += angleStep) {
-        const tmpRadius = Math.cos(beta) * radius;
-        const fixedY = Math.sin(beta) * radius * direction;
-
-        for (let alpha = 0; alpha < 6.28; alpha += angleStep) {
-          result.push({
-            color: this.leathsColor,
-            coordinates: {
-              x: center.x + Math.cos(alpha) * tmpRadius,
-              y: center.y + fixedY,
-              z: center.z - Math.sin(alpha) * tmpRadius,
-            },
-          });
-        }
-      }
-    }
-
-    return result;
-  };
-
-  drawTrueCircle = (radius: number, center: Coordinates): PureBoxParams[] => {
-    const result: PureBoxParams[] = [];
-
-    const zBias = radius / 2 + 1;
-    const xBias = radius / 2 - 1;
-
-    const perimeter = Math.trunc(2 * Math.PI * radius);
-
-    const angle = Math.atan2(1, radius);
-
-    for (let i = 0; i < perimeter; i++) {
-      const angleIncrement = 0.005 * i;
-      const curAngle = angle * i + angleIncrement;
-      const x = Math.cos(curAngle) * radius;
-      const z = Math.sin(curAngle) * radius;
-
-      result.push({
-        color: this.leathsColor,
-        coordinates: {
-          y: center.y,
-          z: center.z - z + zBias,
-          x: center.x + x - xBias,
-        },
-      });
-    }
-
-    return result;
-  };
-
   drawRandomSphere = (size: number, center: Coordinates): PureBoxParams[] => {
     const result: PureBoxParams[] = [];
 
@@ -204,6 +134,8 @@ export class Tree extends MapElement {
     const yCenter = Math.floor(size / 2);
 
     const boxesMap: { [key: string]: boolean } = {};
+
+    const hasFruits = this.seed % 2 === 0;
 
     for (let y = size - 1; y >= 0; y--) {
       for (let x = 0; x < size; x++) {
@@ -216,40 +148,14 @@ export class Tree extends MapElement {
           ) {
             yMidlelevelNulls--;
 
-            // Плоды
             if (
+              hasFruits &&
               randomInt(300, 900) % 2 === 0 &&
               y !== 0 &&
               y !== size - 1 &&
               boxesMap[`${y + 1},${x},${z}`]
             ) {
-              result.push({
-                color: this.appleColor,
-                coordinates: {
-                  y: center.y + y + 0.4,
-                  z: center.z - z + zBias,
-                  x: center.x + x - xBias,
-                },
-                size: "quarter",
-              });
-              result.push({
-                color: this.appleColor,
-                coordinates: {
-                  y: center.y + y + 0.4,
-                  z: center.z - z + zBias,
-                  x: center.x + x - xBias,
-                },
-                size: "quarter",
-              });
-              result.push({
-                color: this.appleColor,
-                coordinates: {
-                  y: center.y + y + 0.05,
-                  z: center.z - z + zBias,
-                  x: center.x + x - xBias,
-                },
-                size: "half",
-              });
+              result.push(...this.drawFruit(center, x, y, z, xBias, zBias));
             }
             continue;
           }
@@ -282,13 +188,63 @@ export class Tree extends MapElement {
               z: center.z - z + zBias,
               x: center.x + x - xBias,
             },
-            // texture: "img/tree2.jpg",
           });
 
           boxesMap[`${y},${x},${z}`] = true;
         }
       }
     }
+
+    return result;
+  };
+
+  drawFruit = (
+    center: Coordinates,
+    x: number,
+    y: number,
+    z: number,
+    xBias: number,
+    zBias: number
+  ): PureBoxParams[] => {
+    const result: PureBoxParams[] = [];
+
+    const seed = modSeed(this.seed, [0, 1]);
+    const fruitColor =
+      seed % 2 === 0
+        ? this.appleColor
+        : seed % 3 === 0
+        ? this.plumColor
+        : this.immatureFruit;
+
+    result.push({
+      color: this.immatureFruit,
+      coordinates: {
+        y: center.y + y + 0.4,
+        z: center.z - z + zBias,
+        x: center.x + x - xBias,
+      },
+      size: "quarter",
+    });
+
+    result.push({
+      color: this.immatureFruit,
+      coordinates: {
+        y: center.y + y + 0.4,
+        z: center.z - z + zBias,
+        x: center.x + x - xBias,
+      },
+      size: "quarter",
+    });
+
+    result.push({
+      color: fruitColor,
+      coordinates: {
+        y: center.y + y + 0.05,
+        z: center.z - z + zBias,
+        x: center.x + x - xBias,
+      },
+      size: "half",
+    });
 
     return result;
   };

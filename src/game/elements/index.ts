@@ -13,14 +13,9 @@ export interface Rotation {
   z: number;
 }
 
-export interface RGBA {
-  r: number;
-  b: number;
-  g: number;
-  a: number;
-}
+export type RGBA = number[];
 
 /**
  * Размер базового блока - full
  */
-export const boxScale = 0.05;
+export const boxScale = 0.1;
