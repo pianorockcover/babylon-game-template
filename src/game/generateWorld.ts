@@ -1,12 +1,13 @@
 import { Scene } from "babylonjs";
 import { Ground } from "./elements/Ground";
 import { MapElement } from "./elements/MapElement";
+import { StreetLamp } from "./elements/StreetLamp";
 import { Tree } from "./elements/Tree";
 import { randomInt } from "./utils/randomInt";
 
 export const mapElements: { [key: string]: typeof MapElement } = {
-  tree: Tree,
-  tree1: Tree,
+  Tree,
+  StreetLamp,
 };
 
 export const generateWorld = (scene: Scene): void => {
