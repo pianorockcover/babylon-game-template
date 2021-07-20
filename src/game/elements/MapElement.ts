@@ -2,7 +2,7 @@ import { Scene } from "babylonjs";
 import { Coordinates } from ".";
 import { Box, PureBoxParams } from "./Box";
 
-export abstract class MapElement {
+export class MapElement {
   protected scene!: Scene;
   protected seed!: number;
 
@@ -23,4 +23,6 @@ export abstract class MapElement {
       (boxParams) => new Box({ scene, ...boxParams })
     );
   };
+
+  remove = (): void => this.boxes.forEach((box) => box.remove());
 }

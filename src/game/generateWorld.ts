@@ -4,7 +4,10 @@ import { MapElement } from "./elements/MapElement";
 import { Tree } from "./elements/Tree";
 import { randomInt } from "./utils/randomInt";
 
-export const mapElements = [Tree];
+export const mapElements: { [key: string]: typeof MapElement } = {
+  tree: Tree,
+  tree1: Tree,
+};
 
 export const generateWorld = (scene: Scene): void => {
   const groud = new Ground(
@@ -22,9 +25,9 @@ export const generateWorld = (scene: Scene): void => {
 
   trees[0] = new Tree({ x: 0, y: 0, z: 0 }, randomInt(1000, 9000));
 
-  for (let i = 1; i < 3; i++) {
-    let x = randomInt(-60, 60);
-    let z = randomInt(-60, 60);
+  for (let i = 1; i < 10; i++) {
+    let x = randomInt(-40, 40);
+    let z = randomInt(-40, 40);
     let j = 0;
 
     const prevElement = trees[i - 1];

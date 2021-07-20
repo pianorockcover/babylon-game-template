@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { createScene } from "./game/createScene";
+import React, { useCallback, useRef, useState } from "react";
 import styled from "styled-components";
 import { GlobalStyles } from "./components/GlobalStyles";
 import { PlayButton } from "./components/PlayButton";
@@ -18,6 +17,7 @@ const Canvas = styled.canvas`
   height: 100%;
 `;
 
+// DEPRECATED
 export const App: React.FC = () => {
   const [started, setStarted] = useState<boolean>(true);
 
@@ -25,11 +25,11 @@ export const App: React.FC = () => {
 
   const onStart = useCallback(() => setStarted(true), []);
 
-  useEffect(() => {
-    if (started && canvasElement && canvasElement.current) {
-      createScene(canvasElement.current);
-    }
-  }, [started]);
+  // useEffect(() => {
+  //   if (started && canvasElement && canvasElement.current) {
+  //     createScene(canvasElement.current);
+  //   }
+  // }, [started]);
 
   return (
     <>

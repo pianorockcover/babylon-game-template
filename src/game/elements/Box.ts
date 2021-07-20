@@ -131,6 +131,10 @@ export class Box {
     }
   };
 
+  remove = (): void => {
+    this._box.dispose();
+  };
+
   setUpEdges = (): void => {
     // if (!noEdges) {
     //   this._box.enableEdgesRendering();

@@ -8,25 +8,31 @@ import {
   StandardMaterial,
   Vector3,
 } from "babylonjs";
-import { generateWorld } from "./generateWorld";
 
-export const createScene = (canvasElement: HTMLCanvasElement): void => {
+export const createSandboxScene = (canvasElement: HTMLCanvasElement): Scene => {
   const engine3D = new Engine(canvasElement, true);
 
   const scene = new Scene(engine3D);
-
-  generateWorld(scene);
 
   const camera = new ArcRotateCamera(
     "camera",
     -Math.PI / 2,
     Math.PI / 2.5,
     3,
-    new Vector3(0, 0.5, 5),
+    new Vector3(0, 1, -3),
     scene
   );
 
   camera.attachControl(canvasElement, true);
+
+  MeshBuilder.CreateGround(
+    "ground",
+    {
+      width: 200,
+      height: 200,
+    },
+    scene
+  );
 
   const light = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
   light.intensity = 0.4;
@@ -51,4 +57,6 @@ export const createScene = (canvasElement: HTMLCanvasElement): void => {
   engine3D.runRenderLoop(() => scene.render());
 
   window.addEventListener("resize", () => engine3D.resize());
+
+  return scene;
 };
