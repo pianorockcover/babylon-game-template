@@ -19,7 +19,7 @@ export const createSandboxScene = (canvasElement: HTMLCanvasElement): Scene => {
     -Math.PI / 2,
     Math.PI / 2.5,
     3,
-    new Vector3(0, 1, -3),
+    new Vector3(0, 1.5, -1),
     scene
   );
 
@@ -28,8 +28,8 @@ export const createSandboxScene = (canvasElement: HTMLCanvasElement): Scene => {
   MeshBuilder.CreateGround(
     "ground",
     {
-      width: 200,
-      height: 200,
+      width: 2,
+      height: 2,
     },
     scene
   );

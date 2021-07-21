@@ -13,8 +13,8 @@ export class Tree extends MapElement {
   darkLeathsColor: RGBA = [78, 153, 98];
 
   appleColor: RGBA = [255, 87, 34];
-  plumColor: RGBA = [200, 171, 57];
-  immatureFruit: RGBA = [173, 207, 90];
+  plumColor: RGBA = [130, 64, 196];
+  immatureFruit: RGBA = [200, 171, 57];
 
   trunkHeight!: number;
   leathsRadius!: number;

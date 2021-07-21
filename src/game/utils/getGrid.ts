@@ -1,5 +1,5 @@
 import { RGBA } from "../elements";
-import { PureBoxParams } from "../elements/Box";
+import { PureBoxParams, BoxSize } from "../elements/Box";
 
 /**
  * Рисует группу пикселей одного цвета
@@ -7,7 +7,7 @@ import { PureBoxParams } from "../elements/Box";
  * @param color
  * @param texture
  */
-export const getColoredGrid = (color: RGBA, texture?: string) => (
+export const getColoredGrid = (color: RGBA, texture?: string, size?: BoxSize) => (
   boxes: number[][]
 ): PureBoxParams[] =>
   boxes.map(([x, y, z]) => ({
@@ -15,7 +15,9 @@ export const getColoredGrid = (color: RGBA, texture?: string) => (
       x: x,
       y: y,
       z: z,
+      stepSize: size,
     },
+    size,
     color,
     texture,
   }));
