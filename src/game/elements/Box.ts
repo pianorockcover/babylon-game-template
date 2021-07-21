@@ -1,10 +1,14 @@
 import {
   Color3,
+  Light,
   Mesh,
   MeshBuilder,
+  Nullable,
   Scene,
+  SpotLight,
   StandardMaterial,
   Texture,
+  Vector3,
 } from "babylonjs";
 import { boxScale, Coordinates, RGBA, Rotation } from ".";
 
@@ -17,6 +21,10 @@ const boxSizes = {
   eight: 8,
 };
 
+interface BoxLight {
+  color: RGBA;
+}
+
 export interface BoxParams {
   scene: Scene;
   size?: BoxSize;
@@ -24,6 +32,7 @@ export interface BoxParams {
   rotation?: Rotation;
   color?: RGBA;
   texture?: string;
+  light?: BoxLight;
 }
 
 export type PureBoxParams = Omit<BoxParams, "scene">;
@@ -31,6 +40,7 @@ export type PureBoxParams = Omit<BoxParams, "scene">;
 export class Box {
   private _name!: string;
   private _box!: Mesh;
+  private _lamp!: Nullable<Light>;
   private _material?: StandardMaterial;
   private _materialName?: string;
 
@@ -49,6 +59,7 @@ export class Box {
     color,
     rotation,
     texture,
+    light,
   }: BoxParams) {
     size = size || "full";
 
@@ -96,6 +107,10 @@ export class Box {
 
     this.setUpMaterial(color, texture);
 
+    if (light) {
+      this.setUpLight(light);
+    }
+
     // Optimization
     this._box.material?.freeze();
     this._box.freezeWorldMatrix();
@@ -107,7 +122,10 @@ export class Box {
     this._materialName = color ? color.join("") : texture ? texture : undefined;
 
     if (this._materialName && !Box.materials[this._materialName]) {
-      const newMaterial = new StandardMaterial(this._materialName, this.scene);
+      const newMaterial = new StandardMaterial(
+        `material-${this._materialName}`,
+        this.scene
+      );
 
       if (texture) {
         newMaterial.diffuseTexture = new Texture(texture, this.scene);
@@ -131,8 +149,38 @@ export class Box {
     }
   };
 
+  // Оптимизация???
+  setUpLight = (light: BoxLight): void => {
+    this._lamp = new SpotLight(
+      `${this._name}-lamp`,
+      this._box.position,
+      new Vector3(0, -1, 0),
+      Math.PI,
+      1,
+      this.scene
+    );
+
+    this._lamp.diffuse = new Color3(
+      (light.color[0] !== undefined ? light.color[0] : 100) / 100,
+      (light.color[1] !== undefined ? light.color[1] : 100) / 100,
+      (light.color[2] !== undefined ? light.color[2] : 100) / 100
+    );
+
+    this._lamp.intensity = light.color[3] !== undefined ? light.color[3] : 1;
+    this._lamp.parent = this._box;
+
+    if (this._box.material) {
+      (this._box
+        .material as StandardMaterial).emissiveColor = this._lamp.diffuse;
+    }
+  };
+
   remove = (): void => {
     this._box.dispose();
+
+    if (this._lamp) {
+      this._lamp.dispose();
+    }
   };
 
   setUpEdges = (): void => {
