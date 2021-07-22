@@ -17,9 +17,24 @@ export class StreetLamp extends MapElement {
   drawStick = (): PureBoxParams[] => {
     const { x, y, z } = this.coordinates;
 
-    const drawGrid = getColoredGrid(this.stickColor);
-
     const result: PureBoxParams[] = [];
+
+    const drawBasementGrid = getColoredGrid([71, 71, 71], undefined, "half");
+
+    result.push(
+      ...drawBasementGrid([
+        [x - 1, y, z - 1],
+        [x - 1, y, z],
+        [x - 1, y, z + 1],
+        [x, y, z - 1],
+        [x, y, z + 1],
+        [x + 1, y, z - 1],
+        [x + 1, y, z],
+        [x + 1, y, z + 1],
+      ])
+    );
+
+    const drawGrid = getColoredGrid(this.stickColor);
 
     const stickHeight = 12;
 
@@ -28,7 +43,7 @@ export class StreetLamp extends MapElement {
     }
 
     const horizontalStickStart = 3;
-    const horizontalStickWidth = -15;
+    const horizontalStickWidth = -10;
 
     const drawHorizontalGrid = getColoredGrid(this.verticalStickColor);
 
@@ -72,7 +87,7 @@ export class StreetLamp extends MapElement {
     result.push({
       coordinates: {
         x: x,
-        y: y + stickHeight - 1,
+        y: y + stickHeight - 3.5,
         z: z + (horizontalStickWidth + horizontalStickStart + 1),
       },
       size: "quarter",
@@ -83,6 +98,19 @@ export class StreetLamp extends MapElement {
     });
 
     // стекло вокруг
+    result.push(
+      ...this.drawGlass(
+        x,
+        y + stickHeight + 2,
+        z + horizontalStickWidth - horizontalStickStart + 1
+      )
+    );
+
+    return result;
+  };
+
+  drawGlass = (x: number, y: number, z: number): PureBoxParams[] => {
+    const result: PureBoxParams[] = [];
 
     const drawGlassGrid = getColoredGrid(
       [164, 164, 164, 0.4],
@@ -92,18 +120,71 @@ export class StreetLamp extends MapElement {
 
     result.push(
       ...drawGlassGrid([
-        [
-          x,
-          y + stickHeight - 1.5,
-          z + (horizontalStickWidth + horizontalStickStart + 1),
-        ],
-        [
-          x,
-          y + stickHeight - 0.5,
-          z + (horizontalStickWidth + horizontalStickStart + 2),
-        ],
+        [x, y + 1, z],
+        [x, y + 1, z - 1],
+        [x, y + 1, z + 1],
+        [x - 1, y + 1, z],
+        [x + 1, y + 1, z],
       ])
     );
+
+    const glassHeight = 3;
+
+    for (let i = 0; i < glassHeight; i++) {
+      result.push(
+        ...drawGlassGrid([
+          [x + 1, y + 2 + i, z + 1],
+          [x + 1, y + 2 + i, z],
+          [x - 1, y + 2 + i, z - 1],
+          [x, y + 2 + i, z - 1],
+          [x - 1, y + 2 + i, z + 1],
+          [x, y + 2 + i, z + 1],
+          [x - 1, y + 2 + i, z],
+          [x + 1, y + 2 + i, z - 1],
+        ])
+      );
+    }
+
+    result.push(
+      ...drawGlassGrid([
+        [x, y + glassHeight + 2, z],
+        [x, y + glassHeight + 2, z - 1],
+        [x, y + glassHeight + 2, z + 1],
+        [x - 1, y + glassHeight + 2, z],
+        [x + 1, y + glassHeight + 2, z],
+      ])
+    );
+
+    const drawGlassBorderGrid = getColoredGrid([73, 66, 63], undefined, "half");
+
+    result.push(
+      ...drawGlassBorderGrid([
+        [x + 1, y + glassHeight + 3, z + 1],
+        [x + 1, y + glassHeight + 3, z],
+        [x - 1, y + glassHeight + 3, z - 1],
+        [x, y + glassHeight + 3, z - 1],
+        [x - 1, y + glassHeight + 3, z + 1],
+        [x, y + glassHeight + 3, z + 1],
+        [x - 1, y + glassHeight + 3, z],
+        [x + 1, y + glassHeight + 3, z - 1],
+
+        [x, y + glassHeight + 4, z],
+      ])
+    );
+
+    const drawGlasСhainGrid = getColoredGrid(
+      [131, 131, 131],
+      undefined,
+      "quarter"
+    );
+
+    const chainHeight = 4;
+
+    for (let i = 0; i < chainHeight; i++) {
+      result.push(
+        ...drawGlasСhainGrid([[x, y + i + glassHeight + 26, z - 12]])
+      );
+    }
 
     return result;
   };

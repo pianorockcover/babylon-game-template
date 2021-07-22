@@ -7,9 +7,11 @@ import { PureBoxParams, BoxSize } from "../elements/Box";
  * @param color
  * @param texture
  */
-export const getColoredGrid = (color: RGBA, texture?: string, size?: BoxSize) => (
-  boxes: number[][]
-): PureBoxParams[] =>
+export const getColoredGrid = (
+  color: RGBA,
+  texture?: string,
+  size?: BoxSize
+) => (boxes: number[][]): PureBoxParams[] =>
   boxes.map(([x, y, z]) => ({
     coordinates: {
       x: x,
