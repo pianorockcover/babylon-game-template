@@ -203,4 +203,6 @@ export class Box {
     //   );
     // }
   };
+
+  getMesh = (): Mesh => this._box;
 }

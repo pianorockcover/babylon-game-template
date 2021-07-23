@@ -1,4 +1,4 @@
-import { Scene } from "babylonjs";
+import { Mesh, Nullable, Scene } from "babylonjs";
 import { Coordinates } from ".";
 import { Box, PureBoxParams } from "./Box";
 
@@ -8,6 +8,8 @@ export class MapElement {
 
   protected draft: PureBoxParams[] = [];
   protected boxes: Box[] = [];
+
+  protected mesh!: Nullable<Mesh>;
 
   coordinates!: Coordinates;
   size: Coordinates = { x: 10, z: 10, y: 10 };
@@ -22,7 +24,20 @@ export class MapElement {
     this.boxes = this.draft.map(
       (boxParams) => new Box({ scene, ...boxParams })
     );
+
+    this.mesh = Mesh.MergeMeshes(
+      this.boxes.map((box) => box.getMesh()),
+      true,
+      true,
+      undefined,
+      false,
+      true
+    );
   };
 
-  remove = (): void => this.boxes.forEach((box) => box.remove());
+  remove = (): void => {
+    if (this.mesh) {
+      this.mesh.dispose();
+    }
+  };
 }
