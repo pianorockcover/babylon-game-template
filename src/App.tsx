@@ -1,7 +1,9 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { GlobalStyles } from "./components/GlobalStyles";
 import { PlayButton } from "./components/PlayButton";
+import { createMainScene } from "./game/createMainScene";
+import { generateWorld } from "./game/generateWorld";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -17,7 +19,6 @@ const Canvas = styled.canvas`
   height: 100%;
 `;
 
-// DEPRECATED
 export const App: React.FC = () => {
   const [started, setStarted] = useState<boolean>(true);
 
@@ -25,11 +26,12 @@ export const App: React.FC = () => {
 
   const onStart = useCallback(() => setStarted(true), []);
 
-  // useEffect(() => {
-  //   if (started && canvasElement && canvasElement.current) {
-  //     createScene(canvasElement.current);
-  //   }
-  // }, [started]);
+  useEffect(() => {
+    if (started && canvasElement && canvasElement.current) {
+      const scene = createMainScene(canvasElement.current);
+      generateWorld(scene);
+    }
+  }, [started]);
 
   return (
     <>

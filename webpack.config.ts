@@ -13,7 +13,10 @@ interface BuildArgs {
 }
 
 export default (_: unknown, argv: BuildArgs): Configuration => ({
-  entry: "./src/index.tsx",
+  entry: {
+    main: "./src/index.tsx",
+    // sandbox: "./src/sandbox.tsx",
+  },
   devtool: argv.mode === "development" && "eval-source-map",
   module: {
     rules: [

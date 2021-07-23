@@ -62,18 +62,6 @@ export const Sandbox: React.FC = () => {
 
       element?.remove();
       newElement.draw(scene);
-
-      const newElement2 = new ElementType(
-        {
-          x: 10,
-          y: 0,
-          z: 5,
-        },
-        randomInt(1000, 9999)
-      );
-
-      newElement2.draw(scene);
-
       setElement(newElement);
     },
     [scene, element]

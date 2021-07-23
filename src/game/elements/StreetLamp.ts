@@ -21,16 +21,20 @@ export class StreetLamp extends MapElement {
 
     const drawBasementGrid = getColoredGrid([71, 71, 71], undefined, "half");
 
+    const hX = x * 2;
+    const hY = y * 2;
+    const hZ = z * 2;
+
     result.push(
       ...drawBasementGrid([
-        [x - 1, y, z - 1],
-        [x - 1, y, z],
-        [x - 1, y, z + 1],
-        [x, y, z - 1],
-        [x, y, z + 1],
-        [x + 1, y, z - 1],
-        [x + 1, y, z],
-        [x + 1, y, z + 1],
+        [hX - 1, hY, hZ - 1],
+        [hX - 1, hY, hZ],
+        [hX - 1, hY, hZ + 1],
+        [hX, hY, hZ - 1],
+        [hX, hY, hZ + 1],
+        [hX + 1, hY, hZ - 1],
+        [hX + 1, hY, hZ],
+        [hX + 1, hY, hZ + 1],
       ])
     );
 
@@ -59,28 +63,28 @@ export class StreetLamp extends MapElement {
 
     result.push(
       ...drawRopeGrid([
-        [x - 0.5, y + (stickHeight + 9.5), z - 1.5],
-        [x + 0.5, y + (stickHeight + 9.5), z - 1.5],
-        [x - 1.5, y + (stickHeight + 10.5), z - 0.5],
-        [x - 1.5, y + (stickHeight + 11.5), z + 0.5],
-        [x - 1.5, y + (stickHeight + 12.5), z + 1.5],
-        [x - 0.5, y + (stickHeight + 13.5), z + 2.5],
-        [x + 0.5, y + (stickHeight + 13.5), z + 2.5],
-        [x + 1.5, y + (stickHeight + 12.5), z + 1.5],
-        [x + 1.5, y + (stickHeight + 11.5), z + 0.5],
-        [x + 1.5, y + (stickHeight + 10.5), z - 0.5],
+        [hX - 0.5, hY + (stickHeight + 9.5), hZ - 1.5],
+        [hX + 0.5, hY + (stickHeight + 9.5), hZ - 1.5],
+        [hX - 1.5, hY + (stickHeight + 10.5), hZ - 0.5],
+        [hX - 1.5, hY + (stickHeight + 11.5), hZ + 0.5],
+        [hX - 1.5, hY + (stickHeight + 12.5), hZ + 1.5],
+        [hX - 0.5, hY + (stickHeight + 13.5), hZ + 2.5],
+        [hX + 0.5, hY + (stickHeight + 13.5), hZ + 2.5],
+        [hX + 1.5, hY + (stickHeight + 12.5), hZ + 1.5],
+        [hX + 1.5, hY + (stickHeight + 11.5), hZ + 0.5],
+        [hX + 1.5, hY + (stickHeight + 10.5), hZ - 0.5],
 
-        [x - 0.5, y + (stickHeight + 8.5), z + 1.5],
-        [x + 0.5, y + (stickHeight + 8.5), z + 1.5],
-        [x - 1.5, y + (stickHeight + 9.5), z + 0.5],
-        [x + 1.5, y + (stickHeight + 9.5), z + 0.5],
-        [x - 1.5, y + (stickHeight + 11.5), z - 1.5],
-        [x - 1.5, y + (stickHeight + 12.5), z - 2.5],
-        [x + 1.5, y + (stickHeight + 11.5), z - 1.5],
-        [x + 1.5, y + (stickHeight + 12.5), z - 2.5],
+        [hX - 0.5, hY + (stickHeight + 8.5), hZ + 1.5],
+        [hX + 0.5, hY + (stickHeight + 8.5), hZ + 1.5],
+        [hX - 1.5, hY + (stickHeight + 9.5), hZ + 0.5],
+        [hX + 1.5, hY + (stickHeight + 9.5), hZ + 0.5],
+        [hX - 1.5, hY + (stickHeight + 11.5), hZ - 1.5],
+        [hX - 1.5, hY + (stickHeight + 12.5), hZ - 2.5],
+        [hX + 1.5, hY + (stickHeight + 11.5), hZ - 1.5],
+        [hX + 1.5, hY + (stickHeight + 12.5), hZ - 2.5],
 
-        [x - 0.5, y + (stickHeight + 13.5), z - 2.5],
-        [x + 0.5, y + (stickHeight + 13.5), z - 2.5],
+        [hX - 0.5, hY + (stickHeight + 13.5), hZ - 2.5],
+        [hX + 0.5, hY + (stickHeight + 13.5), hZ - 2.5],
       ])
     );
 
@@ -100,16 +104,26 @@ export class StreetLamp extends MapElement {
     // стекло вокруг
     result.push(
       ...this.drawGlass(
+        hX,
+        hY + stickHeight + 2,
+        hZ + horizontalStickWidth - horizontalStickStart + 1,
         x,
-        y + stickHeight + 2,
-        z + horizontalStickWidth - horizontalStickStart + 1
+        y,
+        z
       )
     );
 
     return result;
   };
 
-  drawGlass = (x: number, y: number, z: number): PureBoxParams[] => {
+  drawGlass = (
+    x: number,
+    y: number,
+    z: number,
+    fullX: number,
+    fullY: number,
+    fullZ: number
+  ): PureBoxParams[] => {
     const result: PureBoxParams[] = [];
 
     const drawGlassGrid = getColoredGrid(
@@ -182,7 +196,9 @@ export class StreetLamp extends MapElement {
 
     for (let i = 0; i < chainHeight; i++) {
       result.push(
-        ...drawGlasСhainGrid([[x, y + i + glassHeight + 26, z - 12]])
+        ...drawGlasСhainGrid([
+          [fullX * 4, fullY * 4 + i + glassHeight + 40, fullZ * 4 - 24],
+        ])
       );
     }
 
