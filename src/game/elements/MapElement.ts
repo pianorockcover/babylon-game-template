@@ -26,13 +26,21 @@ export class MapElement {
     );
 
     this.mesh = Mesh.MergeMeshes(
-      this.boxes.map((box) => box.getMesh()),
+      this.boxes.filter((box) => !box.isLamp()).map((box) => box.getMesh()),
       true,
       true,
       undefined,
       false,
       true
     );
+
+    if (this.mesh) {
+      this.mesh.freezeWorldMatrix();
+      this.mesh.convertToUnIndexedMesh();
+      this.mesh.material?.freeze();
+      this.mesh.freezeWorldMatrix();
+      this.mesh.doNotSyncBoundingInfo = true;
+    }
   };
 
   remove = (): void => {

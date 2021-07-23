@@ -1,3 +1,8 @@
+import {
+  SceneOptimizerOptions,
+  HardwareScalingOptimization,
+  SceneOptimizer,
+} from "babylonjs";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { GlobalStyles } from "./components/GlobalStyles";
@@ -30,6 +35,12 @@ export const App: React.FC = () => {
     if (started && canvasElement && canvasElement.current) {
       const scene = createMainScene(canvasElement.current);
       generateWorld(scene);
+
+      // Optimizer
+      const options = new SceneOptimizerOptions();
+      options.addOptimization(new HardwareScalingOptimization(0, 1));
+      const optimizer = new SceneOptimizer(scene, options);
+      optimizer.start();
     }
   }, [started]);
 

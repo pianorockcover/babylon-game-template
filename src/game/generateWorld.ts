@@ -11,7 +11,7 @@ export const mapElements: { [key: string]: typeof MapElement } = {
 
 export const generateWorld = (scene: Scene): void => {
   const elements: MapElement[] = [];
-  for (let i = 0; i < 400; i += 20) {
+  for (let i = 0; i < 100; i += 20) {
     elements.push(
       ...[
         new Tree({ z: 20, y: 0, x: -20 - i }, randomInt(1000, 9999)),

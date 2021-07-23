@@ -205,4 +205,5 @@ export class Box {
   };
 
   getMesh = (): Mesh => this._box;
+  isLamp = (): boolean => !!this._lamp;
 }

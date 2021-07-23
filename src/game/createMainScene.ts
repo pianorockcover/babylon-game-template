@@ -1,5 +1,4 @@
 import {
-  ArcRotateCamera,
   Color4,
   Engine,
   FreeCamera,
@@ -15,7 +14,7 @@ export const createMainScene = (canvasElement: HTMLCanvasElement): Scene => {
 
   const scene = new Scene(engine3D);
 
-  const camera = new FreeCamera("camera", new Vector3(0, 1, 0), scene);
+  const camera = new FreeCamera("camera", new Vector3(0, 0.5, 0), scene);
 
   camera.attachControl(canvasElement, true);
 
