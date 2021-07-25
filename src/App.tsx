@@ -1,14 +1,8 @@
-import {
-  SceneOptimizerOptions,
-  HardwareScalingOptimization,
-  SceneOptimizer,
-} from "babylonjs";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { GlobalStyles } from "./components/GlobalStyles";
 import { PlayButton } from "./components/PlayButton";
 import { createMainScene } from "./game/createMainScene";
-import { generateWorld } from "./game/generateWorld";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -33,14 +27,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (started && canvasElement && canvasElement.current) {
-      const scene = createMainScene(canvasElement.current);
-      generateWorld(scene);
-
-      // Optimizer
-      const options = new SceneOptimizerOptions();
-      options.addOptimization(new HardwareScalingOptimization(0, 1));
-      const optimizer = new SceneOptimizer(scene, options);
-      optimizer.start();
+      createMainScene(canvasElement.current);
     }
   }, [started]);
 

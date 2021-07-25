@@ -1,80 +1,65 @@
 import {
-  Color4,
+  ArcRotateCamera,
   Engine,
   FreeCamera,
+  HardwareScalingOptimization,
   HemisphericLight,
   MeshBuilder,
   Scene,
-  StandardMaterial,
+  SceneOptimizer,
+  SceneOptimizerOptions,
   Vector3,
 } from "babylonjs";
+import { generateWorld } from "./generateWorld";
 
-export const createMainScene = (canvasElement: HTMLCanvasElement): Scene => {
-  const engine3D = new Engine(canvasElement, true);
+export const createMainScene = (canvasElement: HTMLCanvasElement): void => {
+  const createDefaultEngine = () =>
+    new Engine(canvasElement, true, {
+      preserveDrawingBuffer: true,
+      stencil: true,
+      disableWebGL2Support: false,
+    });
 
-  const scene = new Scene(engine3D);
+  const asyncEngineCreation = async () => {
+    try {
+      return createDefaultEngine();
+    } catch (e) {
+      console.error(
+        "the available createEngine function failed. Creating the default engine instead"
+      );
+      return createDefaultEngine();
+    }
+  };
 
-  const camera = new FreeCamera("camera", new Vector3(0, 0.5, 0), scene);
+  const initFunction = new Promise<{ scene: Scene; engine: Engine }>(
+    async (resolve) => {
+      const engine = await asyncEngineCreation();
+      if (!engine) throw "engine should not be null.";
 
-  camera.attachControl(canvasElement, true);
+      engine.displayLoadingUI();
 
-  const ground = MeshBuilder.CreateGround(
-    "ground",
-    {
-      width: 200,
-      height: 200,
-    },
-    scene
+      const scene = new Scene(engine);
+
+      const camera = new FreeCamera("camera", new Vector3(0, 0.5, 0), scene);
+      camera.attachControl(canvasElement, true);
+
+      new HemisphericLight("light", new Vector3(1, 1, 0), scene);
+
+      setTimeout(() => {
+        generateWorld(scene).then(() => {
+          const options = new SceneOptimizerOptions();
+          options.addOptimization(new HardwareScalingOptimization(0, 1));
+          const optimizer = new SceneOptimizer(scene, options);
+          optimizer.start();
+
+          engine.hideLoadingUI();
+          resolve({ scene, engine });
+        });
+      }, 100);
+    }
   );
 
-  const light = new HemisphericLight("light1", new Vector3(1, 1, 0), scene);
-  light.intensity = 0.4;
-
-  const skybox = MeshBuilder.CreateBox(
-    "skyBox",
-    {
-      size: 1000.0,
-      faceColors: [
-        new Color4(0, 0, 0, 0),
-        new Color4(0, 0, 0, 0),
-        new Color4(0, 0, 0, 0),
-        new Color4(0, 0, 0, 0),
-      ],
-    },
-    scene
-  );
-  const skyboxMaterial = new StandardMaterial("skyBox", scene);
-  skyboxMaterial.backFaceCulling = false;
-  skybox.material = skyboxMaterial;
-
-  engine3D.runRenderLoop(() => scene.render());
-
-  window.addEventListener("resize", () => engine3D.resize());
-
-  scene.gravity = new Vector3(0, -0.9, 0);
-
-  scene.collisionsEnabled = true;
-
-  // Enable Collisions
-  scene.collisionsEnabled = true;
-
-  //Then apply collisions and gravity to the active camera
-  camera.checkCollisions = true;
-  camera.applyGravity = true;
-
-  //Set the ellipsoid around the camera (e.g. your player's size)
-  camera.ellipsoid = new Vector3(1, 1, 1);
-
-  //finally, say which mesh will be collisionable
-  ground.checkCollisions = true;
-
-  // Optimization
-  // scene.freezeActiveMeshes();
-  scene.autoClear = false; // Color buffer
-  scene.autoClearDepthAndStencil = false; // Depth and stencil, obviously
-  scene.blockMaterialDirtyMechanism = true;
-  // scene.blockfreeActiveMeshesAndRenderingGroups = true;
-  // scene.blockfreeActiveMeshesAndRenderingGroups = false;
-
-  return scene;
+  initFunction.then(({ scene, engine }) => {
+    engine.runRenderLoop(() => scene.render());
+  });
 };

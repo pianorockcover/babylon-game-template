@@ -9,9 +9,9 @@ export const mapElements: { [key: string]: typeof MapElement } = {
   StreetLamp,
 };
 
-export const generateWorld = (scene: Scene): void => {
+export const generateWorld = async (scene: Scene): Promise<void> => {
   const elements: MapElement[] = [];
-  for (let i = 0; i < 100; i += 20) {
+  for (let i = 0; i < 20; i += 20) {
     elements.push(
       ...[
         new Tree({ z: 20, y: 0, x: -20 - i }, randomInt(1000, 9999)),
@@ -22,4 +22,6 @@ export const generateWorld = (scene: Scene): void => {
   }
 
   elements.forEach((element) => element.draw(scene));
+
+  return;
 };
