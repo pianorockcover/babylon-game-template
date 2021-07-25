@@ -6,6 +6,8 @@ import { Scene } from "babylonjs";
 import { MapElement } from "../elements/MapElement";
 import { mapElements } from "../generateWorld";
 import { randomInt } from "../utils/randomInt";
+import { Tree } from "../elements/Tree";
+import { StreetLamp } from "../elements/StreetLamp";
 
 const Wrapper = styled.div`
   width: 100vw;
