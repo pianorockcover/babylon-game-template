@@ -74,8 +74,8 @@ export class Box {
           height: boxScale,
           size: boxScale,
           updatable: false,
-        },
-        this.scene
+        }
+        // this.scene
       );
       Box.initialBox.position.y = -100;
 

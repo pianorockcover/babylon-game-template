@@ -40,7 +40,14 @@ export const createMainScene = (canvasElement: HTMLCanvasElement): void => {
 
       const scene = new Scene(engine);
 
-      const camera = new FreeCamera("camera", new Vector3(0, 0.5, 0), scene);
+      const camera = new ArcRotateCamera(
+        "camera",
+        -Math.PI / 2,
+        Math.PI / 2.5,
+        3,
+        new Vector3(0, 1.5, -1),
+        scene
+      );
       camera.attachControl(canvasElement, true);
 
       new HemisphericLight("light", new Vector3(1, 1, 0), scene);

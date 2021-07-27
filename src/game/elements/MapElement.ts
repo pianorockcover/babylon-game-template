@@ -42,44 +42,27 @@ export class MapElement {
       true
     );
 
-    // ---
     if (this.mesh) {
-      const positions = this.mesh.getVerticesData(VertexBuffer.PositionKind);
-      const normals = this.mesh.getVerticesData(VertexBuffer.NormalKind);
-      const colors = this.mesh.getVerticesData(VertexBuffer.ColorKind);
-
-      const indices = this.mesh.getIndices();
-
-      const vertexData = new VertexData();
-      vertexData.positions = positions;
-      vertexData.normals = normals;
-      // vertexData.colors = colors;
-      vertexData.indices = indices;
-
-      if (colors) {
-        this.mesh.setVerticesData(VertexBuffer.ColorKind, colors);
-      }
-
-      // console.log(vertexData);
-
-      MapElement.vertexMesh = new Mesh(`${+new Date()}`, this.scene);
-      vertexData.applyToMesh(MapElement.vertexMesh);
+      this.mesh.freezeWorldMatrix();
+      this.mesh.convertToUnIndexedMesh();
+      this.mesh.material?.freeze();
+      this.mesh.freezeWorldMatrix();
+      this.mesh.doNotSyncBoundingInfo = true;
     }
-
-    this.mesh?.dispose();
-
-    // if (this.mesh) {
-    //   this.mesh.freezeWorldMatrix();
-    //   this.mesh.convertToUnIndexedMesh();
-    //   this.mesh.material?.freeze();
-    //   this.mesh.freezeWorldMatrix();
-    //   this.mesh.doNotSyncBoundingInfo = true;
-    // }
   };
 
   remove = (): void => {
     if (this.mesh) {
       this.mesh.dispose();
+    }
+  };
+
+  cloneTo = (coordinates: Coordinates): void => {
+    if (this.mesh) {
+      this.mesh.clone(`${+new Date()}`);
+      this.mesh.position.x = coordinates.x;
+      this.mesh.position.x = coordinates.x;
+      this.mesh.position.x = coordinates.x;
     }
   };
 }

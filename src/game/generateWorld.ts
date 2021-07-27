@@ -10,18 +10,16 @@ export const mapElements: { [key: string]: typeof MapElement } = {
 };
 
 export const generateWorld = async (scene: Scene): Promise<void> => {
-  const elements: MapElement[] = [];
-  for (let i = 0; i < 300; i += 20) {
-    elements.push(
-      ...[
-        new Tree({ z: 20, y: 0, x: -20 - i }, randomInt(1000, 9999)),
-        new StreetLamp({ z: 10, y: 0, x: -10 - i }, 0),
-        new Tree({ z: -20, y: 0, x: 20 - i }, randomInt(1000, 9999)),
-      ]
-    );
-  }
+  // const elements: MapElement[] = [];
+  const tree = new Tree({ z: 20, y: 0, x: -20 }, randomInt(1000, 9999));
+  tree.draw(scene);
 
-  elements.forEach((element) => element.draw(scene));
+  for (let i = 0; i < 55; i += 5) {
+    tree.cloneTo({ x: -i, y: 0, z: 20 });
+    tree.cloneTo({ x: -i, y: 0, z: 0 });
+    tree.cloneTo({ x: -i, y: 0, z: -20 });
+  }
+  // elements.forEach((element) => element.draw(scene));
 
   return;
 };
