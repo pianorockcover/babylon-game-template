@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { GlobalStyles } from "./components/GlobalStyles";
 import { PlayButton } from "./components/PlayButton";
-import { createMainScene } from "./game/createMainScene";
+import { createWorld } from "./game/world/createWorld";
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -27,7 +27,7 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     if (started && canvasElement && canvasElement.current) {
-      createMainScene(canvasElement.current);
+      createWorld(canvasElement.current);
     }
   }, [started]);
 

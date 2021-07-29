@@ -44,10 +44,12 @@ export class MapElement {
 
     if (this.mesh) {
       this.mesh.freezeWorldMatrix();
-      this.mesh.convertToUnIndexedMesh();
+      // this.mesh.convertToUnIndexedMesh();
       this.mesh.material?.freeze();
       this.mesh.freezeWorldMatrix();
-      this.mesh.doNotSyncBoundingInfo = true;
+      // this.mesh.doNotSyncBoundingInfo = true;
+
+      this.mesh.checkCollisions = true;
     }
   };
 
@@ -59,10 +61,10 @@ export class MapElement {
 
   cloneTo = (coordinates: Coordinates): void => {
     if (this.mesh) {
-      this.mesh.clone(`${+new Date()}`);
-      this.mesh.position.x = coordinates.x;
-      this.mesh.position.x = coordinates.x;
-      this.mesh.position.x = coordinates.x;
+      const newMesh = this.mesh.clone(`${+new Date()}`);
+      newMesh.position.x = coordinates.x;
+      newMesh.position.x = coordinates.x;
+      newMesh.position.x = coordinates.x;
     }
   };
 }
