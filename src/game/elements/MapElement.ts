@@ -63,8 +63,8 @@ export class MapElement {
     if (this.mesh) {
       const newMesh = this.mesh.clone(`${+new Date()}`);
       newMesh.position.x = coordinates.x;
-      newMesh.position.x = coordinates.x;
-      newMesh.position.x = coordinates.x;
+      newMesh.position.y = coordinates.y;
+      newMesh.position.z = coordinates.z;
     }
   };
 }

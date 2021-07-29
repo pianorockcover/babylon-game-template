@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { GlobalStyles } from "./components/GlobalStyles";
 import { PlayButton } from "./components/PlayButton";
-import { createWorld } from "./game/world/createWorld";
+import { createWorld } from "./game/world/world";
 
 const Wrapper = styled.div`
   width: 100vw;
