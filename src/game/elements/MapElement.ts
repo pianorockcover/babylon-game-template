@@ -1,4 +1,4 @@
-import { Mesh, Nullable, Scene, VertexBuffer, VertexData } from "babylonjs";
+import { Mesh, Nullable, Scene } from "babylonjs";
 import { Coordinates } from ".";
 import { Box, PureBoxParams } from "./Box";
 
@@ -26,7 +26,7 @@ export class MapElement {
     );
 
     this.mesh = Mesh.MergeMeshes(
-      this.boxes.map((box) => box.getMesh()),
+      this.boxes.filter((box) => !box.isLamp()).map((box) => box.getMesh()),
       true,
       true,
       undefined,
@@ -48,6 +48,9 @@ export class MapElement {
   remove = (): void => {
     if (this.mesh) {
       this.mesh.dispose();
+      this.boxes
+        .filter((box) => box.isLamp())
+        .forEach((box) => box.getMesh().dispose());
     }
   };
 
@@ -57,6 +60,10 @@ export class MapElement {
       newMesh.position.x = coordinates.x;
       newMesh.position.y = coordinates.y;
       newMesh.position.z = coordinates.z;
+
+      this.boxes = this.draft
+        .filter((box) => box.light)
+        .map((boxParams) => new Box({ scene: this.scene, ...boxParams }));
     }
   };
 }

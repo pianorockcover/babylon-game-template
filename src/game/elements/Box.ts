@@ -38,6 +38,7 @@ export interface BoxParams {
     height: number;
     depth: number;
   };
+  forceDraw?: boolean;
 }
 
 export type PureBoxParams = Omit<BoxParams, "scene">;
