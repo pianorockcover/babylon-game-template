@@ -33,6 +33,11 @@ export interface BoxParams {
   color?: RGBA;
   texture?: string;
   light?: BoxLight;
+  customDimensions?: {
+    width: number;
+    height: number;
+    depth: number;
+  }
 }
 
 export type PureBoxParams = Omit<BoxParams, "scene">;
@@ -60,36 +65,46 @@ export class Box {
     rotation,
     texture,
     light,
+    customDimensions,
   }: BoxParams) {
     size = size || "full";
 
     this.scene = scene;
     this._name = `box-${+new Date()}`;
 
-    if (!Box.initialBox) {
+    // Custom dimensions box
+    if (customDimensions) {
+      this._box = MeshBuilder.CreateBox(
+        this._name,
+        {
+          width: customDimensions.width * boxScale,
+          height: customDimensions.height * boxScale,
+          depth: customDimensions.depth * boxScale,
+          updatable: false,
+        }
+      );
+    } else if (!Box.initialBox) {
       Box.initialBox = MeshBuilder.CreateBox(
         "initial-box",
         {
           width: boxScale,
           height: boxScale,
-          size: boxScale,
+          depth: boxScale,
           updatable: false,
         }
-        // this.scene
       );
       Box.initialBox.position.y = -100;
 
       Box.initialBox.freezeWorldMatrix();
-      // Box.initialBox.doNotSyncBoundingInfo = true;
       Box.initialBox.convertToUnIndexedMesh();
 
       console.log("Draw initial-box");
+    } else {
+      this._box = Box.initialBox.clone(this._name);
+      this._box.scaling.x = 1 / boxSizes[size];
+      this._box.scaling.y = 1 / boxSizes[size];
+      this._box.scaling.z = 1 / boxSizes[size];
     }
-
-    this._box = Box.initialBox.clone(this._name);
-    this._box.scaling.x = 1 / boxSizes[size];
-    this._box.scaling.y = 1 / boxSizes[size];
-    this._box.scaling.z = 1 / boxSizes[size];
 
     const boxStep =
       boxScale /
@@ -181,27 +196,6 @@ export class Box {
     if (this._lamp) {
       this._lamp.dispose();
     }
-  };
-
-  setUpEdges = (): void => {
-    // if (!noEdges) {
-    //   this._box.enableEdgesRendering();
-    //   this._box.edgesWidth = 0.5;
-    //   const edgesColor = Color(
-    //     `rgb(${color.r},${color.g},${color.b})`,
-    //     "rgb"
-    //   ).darken(0.7);
-    //   const edgesColorRgb: RGBA = (edgesColor
-    //     .rgb()
-    //     .round()
-    //     .object() as unknown) as RGBA;
-    //   this._box.edgesColor = new Color4(
-    //     edgesColorRgb.r / 100,
-    //     edgesColorRgb.g / 100,
-    //     edgesColorRgb.b / 100,
-    //     1
-    //   );
-    // }
   };
 
   getMesh = (): Mesh => this._box;

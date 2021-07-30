@@ -3,6 +3,7 @@ import { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
+import CopyWebpackPlugin from "copy-webpack-plugin";
 
 type Configuration = WebpackConfiguration & {
   devServer?: WebpackDevServerConfiguration;
@@ -48,6 +49,11 @@ export default (_: unknown, argv: BuildArgs): Configuration => ({
       inject: false,
       template: path.resolve(__dirname, "public/index.html"),
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: "public/img", to: "img" },
+      ],
+    })
   ],
   resolve: {
     extensions: [".tsx", ".ts", ".js"],

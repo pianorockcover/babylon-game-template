@@ -2,10 +2,12 @@ import { Scene } from "babylonjs/scene";
 import { MapElement } from "../elements/MapElement";
 import { StreetLamp } from "../elements/StreetLamp";
 import { Tree } from "../elements/Tree";
+import { Banner } from "../elements/Banner";
 
 export const mapElements: { [key: string]: typeof MapElement } = {
   Tree,
   StreetLamp,
+  Banner,
 };
 
 export const createMap = (scene: Scene): void => {
