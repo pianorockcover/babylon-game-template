@@ -37,7 +37,7 @@ export interface BoxParams {
     width: number;
     height: number;
     depth: number;
-  }
+  };
 }
 
 export type PureBoxParams = Omit<BoxParams, "scene">;
@@ -74,32 +74,28 @@ export class Box {
 
     // Custom dimensions box
     if (customDimensions) {
-      this._box = MeshBuilder.CreateBox(
-        this._name,
-        {
-          width: customDimensions.width * boxScale,
-          height: customDimensions.height * boxScale,
-          depth: customDimensions.depth * boxScale,
-          updatable: false,
-        }
-      );
-    } else if (!Box.initialBox) {
-      Box.initialBox = MeshBuilder.CreateBox(
-        "initial-box",
-        {
+      this._box = MeshBuilder.CreateBox(this._name, {
+        width: customDimensions.width * boxScale,
+        height: customDimensions.height * boxScale,
+        depth: customDimensions.depth * boxScale,
+        updatable: false,
+      });
+    } else {
+      if (!Box.initialBox) {
+        Box.initialBox = MeshBuilder.CreateBox("initial-box", {
           width: boxScale,
           height: boxScale,
           depth: boxScale,
           updatable: false,
-        }
-      );
-      Box.initialBox.position.y = -100;
+        });
+        Box.initialBox.position.y = -100;
 
-      Box.initialBox.freezeWorldMatrix();
-      Box.initialBox.convertToUnIndexedMesh();
+        Box.initialBox.freezeWorldMatrix();
+        Box.initialBox.convertToUnIndexedMesh();
 
-      console.log("Draw initial-box");
-    } else {
+        console.log("Draw initial-box");
+      }
+
       this._box = Box.initialBox.clone(this._name);
       this._box.scaling.x = 1 / boxSizes[size];
       this._box.scaling.y = 1 / boxSizes[size];

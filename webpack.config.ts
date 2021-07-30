@@ -50,10 +50,8 @@ export default (_: unknown, argv: BuildArgs): Configuration => ({
       template: path.resolve(__dirname, "public/index.html"),
     }),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: "public/img", to: "img" },
-      ],
-    })
+      patterns: [{ from: "public" }],
+    }),
   ],
   resolve: {
     extensions: [".tsx", ".ts", ".js"],

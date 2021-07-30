@@ -30,4 +30,9 @@ export const createMap = (scene: Scene): void => {
 
   const lamp = new StreetLamp({ x: -10, z: 0, y: 0 }, 1);
   lamp.draw(scene);
+
+  const banner = new Banner({ x: -7, z: 5, y: 0 }, 1);
+  banner.draw(scene);
+
+  banner.cloneTo({ x: 4, z: 2, y: 0 });
 };
