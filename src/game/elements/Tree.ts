@@ -9,8 +9,8 @@ import { randomElement } from "../utils/randomElement";
 export class Tree extends MapElement {
   trunkColor: RGBA = [123, 100, 82];
   trunkStickColor: RGBA = [70, 59, 54];
-  leathsColor: RGBA = [95, 210, 106];
-  darkLeathsColor: RGBA = [78, 153, 98];
+  leathsColor: RGBA = [150, 191, 61];
+  darkLeathsColor: RGBA = [100, 150, 37];
 
   appleColor: RGBA = [255, 87, 34];
   plumColor: RGBA = [130, 64, 196];

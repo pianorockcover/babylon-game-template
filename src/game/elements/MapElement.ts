@@ -13,6 +13,7 @@ export class MapElement {
 
   coordinates!: Coordinates;
   size: Coordinates = { x: 10, z: 10, y: 10 };
+  isSolid = true;
 
   constructor(coordinates: Coordinates, seed: number) {
     this.coordinates = coordinates;
@@ -41,7 +42,7 @@ export class MapElement {
       this.mesh.freezeWorldMatrix();
       // this.mesh.doNotSyncBoundingInfo = true;
 
-      this.mesh.checkCollisions = true;
+      this.mesh.checkCollisions = this.isSolid;
     }
   };
 

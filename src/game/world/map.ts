@@ -3,11 +3,15 @@ import { MapElement } from "../elements/MapElement";
 import { StreetLamp } from "../elements/StreetLamp";
 import { Tree } from "../elements/Tree";
 import { Banner } from "../elements/Banner";
+import { Grass } from "../elements/Grass";
+import { Stone } from "../elements/Stone";
 
 export const mapElements: { [key: string]: typeof MapElement } = {
   Tree,
   StreetLamp,
   Banner,
+  Grass,
+  Stone,
 };
 
 export const createMap = (scene: Scene): void => {
@@ -42,4 +46,11 @@ export const createMap = (scene: Scene): void => {
   banner.draw(scene);
 
   banner.cloneTo({ x: 4, z: 2, y: 0 });
+
+  const grass = new Grass({ x: -28, z: 14, y: 0 }, 1532);
+  grass.draw(scene);
+  grass.cloneTo({ x: 4, z: 14, y: 0 });
+  grass.cloneTo({ x: 5, z: 14, y: 0 });
+  grass.cloneTo({ x: 4, z: 13, y: 0 });
+  grass.cloneTo({ x: 5, z: 13, y: 0 });
 };
