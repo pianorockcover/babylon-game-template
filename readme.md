@@ -1,2 +1,1 @@
-Game Template for Babylon.Js And React
-Getting Started Guide: https://doc.babylonjs.com/start/chap2
+3D Game written via Babylon.js and React
