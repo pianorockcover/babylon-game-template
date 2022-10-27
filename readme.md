@@ -1,2 +1,2 @@
-Game Template for Babylon.Js And React
-Getting Started Guide: https://doc.babylonjs.com/start/chap2
+Game Template for phaser.Js And React
+Getting Started Guide: https://phaser.io/tutorials/getting-started-phaser3/part5

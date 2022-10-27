@@ -1,7 +1,6 @@
 import path from "path";
 import { Configuration as WebpackConfiguration } from "webpack";
 import { Configuration as WebpackDevServerConfiguration } from "webpack-dev-server";
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 
 type Configuration = WebpackConfiguration & {
@@ -34,12 +33,6 @@ export default (_: unknown, argv: BuildArgs): Configuration => ({
     ],
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin({
-      async: false,
-      eslint: {
-        files: "./src/**/*",
-      },
-    }),
     new HtmlWebpackPlugin({
       name: "index.html",
       inject: false,
@@ -54,7 +47,9 @@ export default (_: unknown, argv: BuildArgs): Configuration => ({
     filename: "main.js",
   },
   devServer: {
-    contentBase: path.join(__dirname, "build"),
+    static: {
+      directory: path.join(__dirname, "build"),
+    },
     compress: true,
     port: 3000,
   },
