@@ -48,7 +48,7 @@ export default (_: unknown, argv: BuildArgs): Configuration => ({
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, "build"),
+      directory: path.join(__dirname, "public"),
     },
     compress: true,
     port: 3000,

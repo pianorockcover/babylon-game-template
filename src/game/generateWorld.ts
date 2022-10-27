@@ -1,43 +1,54 @@
 import Phaser from "phaser";
 
 export const generateWorld = (): Phaser.Game => {
-  return new Phaser.Game({
-    type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    physics: {
-      default: "arcade",
-      arcade: {
-        gravity: { y: 200 },
-      },
-    },
-    scene: {
-      preload() {
-        this.load.setBaseURL("http://labs.phaser.io");
+  let controls: Phaser.Cameras.Controls.SmoothedKeyControl;
 
-        this.load.image("sky", "assets/skies/space3.png");
-        this.load.image("logo", "assets/sprites/phaser3-logo.png");
-        this.load.image("red", "assets/particles/red.png");
+  const game = new Phaser.Game({
+    type: Phaser.WEBGL,
+    width: 1000,
+    height: 800,
+    backgroundColor: "#2d2d2d",
+    parent: "phaser-example",
+    pixelArt: true,
+    scene: {
+      active: true,
+      preload() {
+        this.load.image("tiles", "assets/outside.png");
+        this.load.tilemapTiledJSON("map", "maps/1.json");
       },
       create() {
-        this.add.image(400, 300, "sky");
-
-        const particles = this.add.particles("red");
-
-        const emitter = particles.createEmitter({
-          speed: 100,
-          scale: { start: 1, end: 0 },
-          blendMode: "ADD",
+        const map = this.make.tilemap({
+          key: "map",
         });
 
-        const logo = this.physics.add.image(400, 100, "logo");
+        const tileset1 = map.addTilesetImage("outside", "tiles");
 
-        logo.setVelocity(100, 200);
-        logo.setBounce(1, 1);
-        logo.setCollideWorldBounds(true);
+        map.createLayer("Tile Layer 1", [tileset1]);
 
-        emitter.startFollow(logo);
+        const cursors = this.input.keyboard.createCursorKeys();
+
+        this.cameras.main.setZoom(2);
+
+        const controlConfig = {
+          camera: this.cameras.main,
+          left: cursors.left,
+          right: cursors.right,
+          up: cursors.up,
+          down: cursors.down,
+          acceleration: 0.04,
+          drag: 0.0005,
+          maxSpeed: 0.7,
+        };
+
+        controls = new Phaser.Cameras.Controls.SmoothedKeyControl(
+          controlConfig
+        );
+      },
+      update(_time, delta) {
+        controls.update(delta);
       },
     },
   });
+
+  return game;
 };
