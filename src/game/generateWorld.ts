@@ -5,15 +5,15 @@ export const generateWorld = (): Phaser.Game => {
 
   const game = new Phaser.Game({
     type: Phaser.WEBGL,
-    width: 1000,
-    height: 800,
+    width: window.innerWidth,
+    height: window.innerHeight,
     backgroundColor: "#2d2d2d",
     parent: "phaser-example",
     pixelArt: true,
     scene: {
       active: true,
       preload() {
-        this.load.image("tiles", "assets/outside.png");
+        this.load.image("tiles", "assets/static.png");
         this.load.tilemapTiledJSON("map", "maps/1.json");
       },
       create() {
@@ -21,13 +21,13 @@ export const generateWorld = (): Phaser.Game => {
           key: "map",
         });
 
-        const tileset1 = map.addTilesetImage("outside", "tiles");
+        const tileset1 = map.addTilesetImage("static", "tiles");
 
         map.createLayer("Tile Layer 1", [tileset1]);
 
         const cursors = this.input.keyboard.createCursorKeys();
 
-        this.cameras.main.setZoom(2);
+        this.cameras.main.setZoom(1);
 
         const controlConfig = {
           camera: this.cameras.main,
